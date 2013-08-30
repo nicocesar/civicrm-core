@@ -34,6 +34,69 @@
  */
 class CRM_Utils_PDF_Utils {
 
+  static function latex2pdf(&$text, $fileName = 'civicrm.pdf', $output = FALSE, $pdfFormat = NULL) {
+	  /* FIXME: get $paper_size, $orientation, $margins */
+
+    if (is_array($text)) {
+      $pages = &$text;
+    }
+    else {
+      $pages = array($text);
+    }
+
+
+    $head='\documentclass[12pt]{letter}
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+
+\topmargin -.25in
+\textheight 8.15in
+
+\address{\vspace{0.354in}}
+
+\begin{document}
+
+';
+		 $footer='
+\end{document}';
+
+    $latex = $head;
+    foreach ($pages as $page) {
+			$latex.=$page;
+		}
+    $latex.=$footer;
+
+		$descriptorspec = array(
+  	 0 => array("pipe", "r"),
+   	 1 => array("pipe", "w")
+		);
+
+
+
+		$process = proc_open("/usr/local/bin/pdflatex_wrapper.sh", $descriptorspec, $pipes);
+
+
+	  if (is_resource($process)) {
+			fwrite($pipes[0], $latex);
+			fclose($pipes[0]);
+
+      $pdf = stream_get_contents($pipes[1]);
+			fclose($pipes[1]);
+	  } else {
+			CRM_Core_Error::debug_log_message("ERROR creating PDF. Check /tmp/pdflatex_*");
+		}
+
+    if ($output) {
+      return $pdf;
+    }
+    else {
+      header('Content-Type: application/pdf');
+      header('Content-Disposition: attachment; filename="' . $fileName . '"');
+      echo $pdf;
+    }
+	}
+
   static function html2pdf(&$text, $fileName = 'civicrm.pdf', $output = FALSE, $pdfFormat = NULL) {
     if (is_array($text)) {
       $pages = &$text;

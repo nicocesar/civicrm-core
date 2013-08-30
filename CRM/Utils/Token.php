@@ -619,7 +619,10 @@ class CRM_Utils_Token {
       $str
     );
 
-    $str = preg_replace('/\\\\|\{(\s*)?\}/', ' ', $str);
+		// 2013-08-31 nico@fsf.org this replacement is stripping all the '{' and '}'  from the LaTeX files
+		// maybe it got solved at some point. maybe it has undesired collateral effects. I'm bugging the
+		// CiviCRM community to take a look at this pull request.
+    //$str = preg_replace('/\\\\|\{(\s*)?\}/', ' ', $str);
     return $str;
   }
 

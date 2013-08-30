@@ -39,7 +39,7 @@
  *
  */
 class CRM_Contribute_Task {
-  CONST DELETE_CONTRIBUTIONS = 1, PRINT_CONTRIBUTIONS = 2, EXPORT_CONTRIBUTIONS = 3, BATCH_CONTRIBUTIONS = 4, EMAIL_CONTACTS = 5, UPDATE_STATUS = 6, PDF_RECEIPT = 7;
+  CONST DELETE_CONTRIBUTIONS = 1, PRINT_CONTRIBUTIONS = 2, EXPORT_CONTRIBUTIONS = 3, BATCH_CONTRIBUTIONS = 4, EMAIL_CONTACTS = 5, UPDATE_STATUS = 6, PDF_RECEIPT = 7, LATEX_TEST = 9;
 
   /**
    * the task array
@@ -104,6 +104,10 @@ class CRM_Contribute_Task {
         ),
         8 => array('title' => ts('Thank-you Letters for Contributions'),
           'class' => 'CRM_Contribute_Form_Task_PDFLetter',
+          'result' => FALSE,
+        ),
+        9 => array('title' => ts('Latex Letters for Contributions'),
+          'class' => 'CRM_Contribute_Form_Task_PDFLatex',
           'result' => FALSE,
         ),
       );
